@@ -24,7 +24,6 @@ PostgreSQL, often simply "Postgres", is an object-relational database management
 
 ```bash
 docker run --name some-postgres -e POSTGRES_PASSWORD=RaNd0MpA55W0Rd -d yobasystems/alpine-postgres
-
 ```
 It will create a new db called "postgres", with user "postgres" and set root password of "RaNd0MpA55W0Rd".
 
@@ -34,9 +33,11 @@ It will create a new db called "postgres", with user "postgres" and set root pas
 * `/var/lib/postgresql/data`: Database files
 
 
+
 ## Environment Variables:
 
 The PostgreSQL image uses several environment variables which are easy to miss. While none of the variables are required, setting a password as a minimum will ensure some degree of security when using the image.
+
 
 ### Main Postgres parameters:
 * `POSTGRES_PASSWORD`: This environment variable is recommended for you to use the PostgreSQL image. This environment variable sets the superuser password for PostgreSQL. The default superuser is defined by the POSTGRES_USER environment variable. In the above example, it is being set to "RaNd0MpA55W0Rd".
@@ -50,6 +51,7 @@ The PostgreSQL image uses several environment variables which are easy to miss. 
 
 
 ## Docker Compose example:
+
 
 ####(Please pass your own credentials, don't use these ones for production!!)
 
