@@ -5,7 +5,7 @@
 [![Alpine Version](https://img.shields.io/badge/alpine%20version-v3.5-green.svg?maxAge=2592000?style=flat-square)](http://alpinelinux.org/) [![Postgres Version](https://img.shields.io/badge/Postgres%20version-v9.6-green.svg?maxAge=2592000?style=flat-square)](https://www.postgresql.org/)
 
 
-This Docker image [(yobasystems/alpine-Postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 9.6](https://www.postgresql.org/) object-relational database server.
+This Docker image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 9.6](https://www.postgresql.org/) object-relational database server.
 
 
 ## Features
@@ -50,6 +50,7 @@ The PostgreSQL image uses several environment variables which are easy to miss. 
 
 
 ## Docker Compose example:
+
 ####(Please pass your own credentials, don't use these ones for production!!)
 
 ```yalm
