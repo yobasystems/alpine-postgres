@@ -2,17 +2,17 @@
 
 [![Docker Layers](https://img.shields.io/badge/docker%20layers-3-blue.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Size](https://img.shields.io/badge/docker%20size-10%20MB-blue.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-Postgres.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Pulls](https://img.shields.io/docker/pulls/yobasystems/alpine-Postgres.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
-[![Alpine Version](https://img.shields.io/badge/alpine%20version-v3.5-green.svg?maxAge=2592000?style=flat-square)](http://alpinelinux.org/) [![Postgres Version](https://img.shields.io/badge/Postgres%20version-v9.6-green.svg?maxAge=2592000?style=flat-square)](https://www.postgresql.org/)
+[![Alpine Version](https://img.shields.io/badge/alpine%20version-v3.5-green.svg?maxAge=2592000?style=flat-square)](http://alpinelinux.org/) [![Postgres Version](https://img.shields.io/badge/Postgres%20version-v9.6.1-green.svg?maxAge=2592000?style=flat-square)](https://www.postgresql.org/)
 
 
-This Docker image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 9.6](https://www.postgresql.org/) object-relational database server.
+This Docker image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 9.6.1](https://www.postgresql.org/) object-relational database server.
 
 
 ## Features
 
   * Minimal size only 10 MB and only 3 layers
   * Memory usage is minimal on Alpine Linux.
-  * Postgresql Version 9.6
+  * Postgresql Version 9.6.1
 
 
 ## What is PostgreSQL?
