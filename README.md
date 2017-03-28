@@ -13,7 +13,14 @@ This Docker image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobas
   * Minimal size only 10 MB and only 3 layers
   * Memory usage is minimal on Alpine Linux.
   * Postgresql Version 9.6.2
+  * Armv7 (armhf) version with ```:armhf``` tag
 
+## Tags
+
+  * ```:latest``` latest nginx & alpine
+  * ```:master``` master branch usually inline with latest
+  * ```:v0.0.0``` version number related to nginx version
+  * ```:armhf``` Armv7 based on latest tag but arm architecture
 
 ## What is PostgreSQL?
 PostgreSQL, often simply "Postgres", is an object-relational database management system (ORDBMS) with an emphasis on extensibility and standards-compliance. As a database server, its primary function is to store data, securely and supporting best practices, and retrieve it later, as requested by other software applications, be it those on the same computer or those running on another computer across a network (including the Internet). It can handle workloads ranging from small single-machine applications to large Internet-facing applications with many concurrent users. Recent versions also provide replication of the database itself for security and scalability.
