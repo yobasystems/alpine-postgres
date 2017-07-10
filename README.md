@@ -1,8 +1,8 @@
 # Postgres Docker image running on Alpine Linux
 
-[![Docker Layers](https://img.shields.io/badge/docker%20layers-3-blue.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Size](https://img.shields.io/badge/docker%20size-10%20MB-blue.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-Postgres.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Pulls](https://img.shields.io/docker/pulls/yobasystems/alpine-Postgres.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
+[![Docker Layers](https://img.shields.io/badge/docker%20layers-3-blue.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Size](https://img.shields.io/badge/docker%20size-10%20MB-blue.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-postgres.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Pulls](https://img.shields.io/docker/pulls/yobasystems/alpine-postgres.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
-[![Alpine Version](https://img.shields.io/badge/alpine%20version-v3.5-green.svg?maxAge=2592000?style=flat-square)](http://alpinelinux.org/) [![Postgres Version](https://img.shields.io/badge/Postgres%20version-v9.6.3-green.svg?maxAge=2592000?style=flat-square)](https://www.postgresql.org/)
+[![Alpine Version](https://img.shields.io/badge/alpine%20version-v3.6.2-green.svg?maxAge=2592000?style=flat-square)](http://alpinelinux.org/) [![Postgres Version](https://img.shields.io/badge/Postgres%20version-v9.6.3-green.svg?maxAge=2592000?style=flat-square)](https://www.postgresql.org/)
 
 
 This Docker image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 9.6.3](https://www.postgresql.org/) object-relational database server.
@@ -86,9 +86,9 @@ mysql:
 
 ## Source Repository
 
-* [Bitbucket - yobasystems/alpine-Postgres](https://bitbucket.org/yobasystems/alpine-postgres/)
+* [Bitbucket - yobasystems/alpine-postgres](https://bitbucket.org/yobasystems/alpine-postgres/)
 
-* [Github - yobasystems/alpine-Postgres](https://github.com/yobasystems/alpine-postgres)
+* [Github - yobasystems/alpine-postgres](https://github.com/yobasystems/alpine-postgres)
 
 ## Links
 
