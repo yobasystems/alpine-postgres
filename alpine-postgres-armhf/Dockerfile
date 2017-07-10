@@ -1,5 +1,5 @@
-FROM armhf/alpine:3.5
-MAINTAINER Dominic Taylor <dominic@yobasystems.co.uk>
+FROM yobasystems/alpine:armhf
+LABEL maintainer "Dominic Taylor <dominic@yobasystems.co.uk>" architecture="ARM32v7/armhf"
 
 ENV LANG en_GB.utf8
 ENV PGDATA /var/lib/postgresql/data
