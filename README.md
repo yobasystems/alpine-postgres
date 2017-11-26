@@ -2,13 +2,13 @@
 
 [![Docker Layers](https://img.shields.io/badge/docker%20layers-3-blue.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Size](https://img.shields.io/badge/docker%20size-10%20MB-blue.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-postgres.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Pulls](https://img.shields.io/docker/pulls/yobasystems/alpine-postgres.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
-[![Alpine Version](https://img.shields.io/badge/alpine%20version-v3.6.2-green.svg?maxAge=2592000?style=flat-square)](http://alpinelinux.org/) [![Postgres Version](https://img.shields.io/badge/Postgres%20version-v9.6.3-green.svg?maxAge=2592000?style=flat-square)](https://www.postgresql.org/)
+[![Alpine Version](https://img.shields.io/badge/alpine%20version-v3.6.2-green.svg?maxAge=2592000?style=flat-square)](http://alpinelinux.org/) [![Postgres Version](https://img.shields.io/badge/Postgres%20version-v9.6.6-green.svg?maxAge=2592000?style=flat-square)](https://www.postgresql.org/)
 
 
-This Docker image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 9.6.3](https://www.postgresql.org/) object-relational database server.
+This Docker image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 9.6.6](https://www.postgresql.org/) object-relational database server.
 
 ##### Alpine Version 3.6.2 (Released Jun 17, 2017)
-##### Postgres Version 9.6.3
+##### Postgres Version 9.6.6
 
 ----
 
@@ -22,7 +22,7 @@ PostgreSQL, often simply "Postgres", is an object-relational database management
 
 * Minimal size only 10 MB and only 3 layers
 * Memory usage is minimal on Alpine Linux.
-* Postgresql Version 9.6.3
+* Postgresql Version 9.6.6
 * Armv7 (armhf) version with ```:armhf``` tag
 
 ## Architectures
