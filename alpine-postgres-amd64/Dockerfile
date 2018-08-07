@@ -1,5 +1,5 @@
-FROM yobasystems/alpine:amd64
-LABEL maintainer "Dominic Taylor <dominic@yobasystems.co.uk>" architecture="AMD64/x86_64" date="26-nov-2017"
+FROM yobasystems/alpine:3.8-amd64
+LABEL maintainer "Dominic Taylor <dominic@yobasystems.co.uk>" architecture="AMD64/x86_64" date="07-aug-2018"
 ENV LANG en_GB.utf8
 ENV PGDATA /var/lib/postgresql/data
 
