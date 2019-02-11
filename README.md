@@ -2,13 +2,13 @@
 
 [![Docker Layers](https://img.shields.io/badge/docker%20layers-3-blue.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Size](https://img.shields.io/badge/docker%20size-10%20MB-blue.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-postgres.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/) [![Docker Pulls](https://img.shields.io/docker/pulls/yobasystems/alpine-postgres.svg?maxAge=2592000?style=flat-square)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
-[![Alpine Version](https://img.shields.io/badge/alpine%20version-v3.8.0-green.svg?maxAge=2592000?style=flat-square)](http://alpinelinux.org/) [![Postgres Version](https://img.shields.io/badge/Postgres%20version-v10.4-green.svg?maxAge=2592000?style=flat-square)](https://www.postgresql.org/)
+[![Alpine Version](https://img.shields.io/badge/alpine%20version-v3.9.0-green.svg?maxAge=2592000?style=flat-square)](http://alpinelinux.org/) [![Postgres Version](https://img.shields.io/badge/Postgres%20version-v11.1-green.svg?maxAge=2592000?style=flat-square)](https://www.postgresql.org/)
 
 
-This Docker image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 10.4](https://www.postgresql.org/) object-relational database server.
+This Docker image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 11.1](https://www.postgresql.org/) object-relational database server.
 
-##### Alpine Version 3.8.0 (Released June 26, 2018)
-##### Postgres Version 10.4
+##### Alpine Version 3.9.0 (Released January 29, 2019)
+##### Postgres Version 11.1
 
 ----
 
@@ -22,13 +22,12 @@ PostgreSQL, often simply "Postgres", is an object-relational database management
 
 * Minimal size only 10 MB and only 3 layers
 * Memory usage is minimal on Alpine Linux.
-* Postgresql Version 10.4
+* Postgresql Version 11.1
 * Armv7 (armhf) version with ```:armhf``` tag
 
 ## Architectures
 
 * ```:amd64```, ```:latest``` - 64 bit Intel/AMD (x86_64/amd64)
-* ```:i386```, ```:x86``` - 32 bit Intel/AMD (x86/i686)
 * ```:arm64v8```, ```:aarch64``` - 64 bit ARM (ARMv8/aarch64)
 * ```:arm32v7```, ```:armhf``` - 32 bit ARM (ARMv7/armhf)
 
@@ -40,6 +39,7 @@ PostgreSQL, often simply "Postgres", is an object-relational database management
 * ```:master``` master branch usually inline with latest
 * ```:v0.0.0``` version number related to docker version
 * ```:armhf```, ```:arm32v7``` Armv7 based on latest tag but arm architecture
+* ```:aarch64```, ```:arm64v8``` Armv8 based on latest tag but arm64 architecture
 
 ## Volume structure
 
@@ -50,10 +50,15 @@ PostgreSQL, often simply "Postgres", is an object-relational database management
 The PostgreSQL image uses several environment variables which are easy to miss. While none of the variables are required, setting a password as a minimum will ensure some degree of security when using the image.
 
 ### Main Postgres parameters:
+
 * `POSTGRES_PASSWORD`: This environment variable is recommended for you to use the PostgreSQL image. This environment variable sets the superuser password for PostgreSQL. The default superuser is defined by the POSTGRES_USER environment variable. In the above example, it is being set to "RaNd0MpA55W0Rd".
+
 * `POSTGRES_USER`: This optional environment variable is used in conjunction with POSTGRES_PASSWORD to set a user and its password. This variable will create the specified user with superuser power and a database with the same name. If it is not specified, then the default user of "postgres" will be used.
+
 * `PGDATA`: This optional environment variable can be used to define another location - like a subdirectory - for the database files. The default is /var/lib/postgresql/data, but if the data volume you're using is a fs mountpoint (like with GCE persistent disks), Postgres initdb recommends a subdirectory (for example /var/lib/postgresql/data/pgdata ) be created to contain the data.
+
 * `POSTGRES_DB`: This optional environment variable can be used to define a different name for the default database that is created when the image is first started. If it is not specified, then the value of POSTGRES_USER will be used.
+
 * `POSTGRES_INITDB_ARGS`: This optional environment variable can be used to send arguments to postgres initdb. The value is a space separated string of arguments as postgres initdb would expect them. This is useful for adding functionality like data page checksums: -e POSTGRES_INITDB_ARGS="--data-checksums".
 
 > https://www.postgresql.org/
