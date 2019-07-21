@@ -14,6 +14,7 @@ RUN apk update && \
 VOLUME /var/lib/postgresql/data
 
 COPY files/docker-entrypoint.sh /
+RUN chmod -R 755 /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
