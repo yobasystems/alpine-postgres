@@ -2,7 +2,7 @@
 chown -R postgres "$PGDATA"
 
 if [ -z "$(ls -A "$PGDATA")" ]; then
-    gosu postgres initdb
+    su-exec postgres initdb
     sed -ri "s/^#(listen_addresses\s*=\s*)\S+/\1'*'/" "$PGDATA"/postgresql.conf
 
     : ${POSTGRES_USER:="postgres"}
@@ -23,7 +23,7 @@ if [ -z "$(ls -A "$PGDATA")" ]; then
 
     if [ "$POSTGRES_DB" != 'postgres' ]; then
       createSql="CREATE DATABASE $POSTGRES_DB;"
-      echo $createSql | gosu postgres postgres --single -jE
+      echo $createSql | su-exec postgres postgres --single -jE
       echo
     fi
 
@@ -34,10 +34,10 @@ if [ -z "$(ls -A "$PGDATA")" ]; then
     fi
 
     userSql="$op USER $POSTGRES_USER WITH SUPERUSER $pass;"
-    echo $userSql | gosu postgres postgres --single -jE
+    echo $userSql | su-exec postgres postgres --single -jE
     echo
 
-    gosu postgres pg_ctl -D "$PGDATA" \
+    su-exec postgres pg_ctl -D "$PGDATA" \
         -o "-c listen_addresses=''" \
         -w start
 
@@ -51,9 +51,9 @@ if [ -z "$(ls -A "$PGDATA")" ]; then
         echo
     done
 
-    gosu postgres pg_ctl -D "$PGDATA" -m fast -w stop
+    su-exec postgres pg_ctl -D "$PGDATA" -m fast -w stop
 
     { echo; echo "host all all 0.0.0.0/0 $authMethod"; } >> "$PGDATA"/pg_hba.conf
 fi
 
-exec gosu postgres "$@"
+exec su-exec postgres "$@"
