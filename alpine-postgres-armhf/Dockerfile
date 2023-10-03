@@ -1,18 +1,18 @@
-FROM yobasystems/alpine:3.14.0-armhf
+FROM yobasystems/alpine:3.18.3-armhf
 
 ARG BUILD_DATE
 ARG VCS_REF
 
-LABEL maintainer="Dominic Taylor <dominic@yobasystems.co.uk>" \
+LABEL maintainer="Dominic Taylor <dominic@yoba.systems>" \
     architecture="arm32v7/armhf" \
-    postgres-version="13.3" \
-    alpine-version="3.14.0" \
-    build="07-Jul-2021" \
+    postgres-version="15.4" \
+    alpine-version="3.18.3" \
+    build="03-Oct-2023" \
     org.opencontainers.image.title="alpine-postgres" \
-    org.opencontainers.image.description="Postgresql Docker image running on Alpine Linux" \
-    org.opencontainers.image.authors="Dominic Taylor <dominic@yobasystems.co.uk>" \
+    org.opencontainers.image.description="Postgresql container image running on Alpine Linux" \
+    org.opencontainers.image.authors="Dominic Taylor <dominic@yoba.systems>" \
     org.opencontainers.image.vendor="Yoba Systems" \
-    org.opencontainers.image.version="v13.3" \
+    org.opencontainers.image.version="v15.4" \
     org.opencontainers.image.url="https://hub.docker.com/r/yobasystems/alpine-postgres/" \
     org.opencontainers.image.source="https://github.com/yobasystems/alpine-postgres" \
     org.opencontainers.image.revision=$VCS_REF \
@@ -22,7 +22,7 @@ ENV LANG en_GB.utf8
 ENV PGDATA /var/lib/postgresql/data
 
 RUN apk update && \
-    apk add su-exec tzdata libpq postgresql postgresql-url_encode && \
+    apk add su-exec tzdata libpq postgresql15 postgresql-url_encode && \
     mkdir /docker-entrypoint-initdb.d && \
     rm -rf /var/cache/apk/*
 

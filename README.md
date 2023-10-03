@@ -1,41 +1,55 @@
-# Postgres Docker image running on Alpine Linux
+# Postgres container image running on Alpine Linux
 
 [![Docker Automated build](https://img.shields.io/docker/automated/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
-[![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.14.0-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
-[![Postgres Version](https://img.shields.io/badge/Postgres%20version-v13.3-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
+[![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.18.3-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
+[![Postgres Version](https://img.shields.io/badge/Postgres%20version-v15.4-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
 
 
-This Docker image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 13.3](https://www.postgresql.org/) object-relational database server.
+This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 15.4](https://www.postgresql.org/) object-relational database server.
 
-##### Alpine Version 3.14.0 (Released 2021-06-15)
-##### Postgres Version 13.3
+### Alpine Version 3.18.3 (Released 2023-08-07)
+##### Postgres Version 15.4
 
 ----
 
-## What is Alpine Linux?
+## Table of Contents
+
+- [What is Alpine Linux?](#what-is-alpine-linux)
+- [Features](#features)
+- [Architectures](#architectures)
+- [Tags](#tags)
+- [Layers & Sizes](#layers--sizes)
+- [How to use this image](#how-to-use-this-image)
+- [Image contents & Vulnerability analysis](#image-contents--vulnerability-analysis)
+- [Source Repositories](#source-repositories)
+- [Container Registries](#container-registries)
+- [Links](#links)
+- [Donation](#donation)
+
+
+## 🏔️ What is Alpine Linux?
 Alpine Linux is a Linux distribution built around musl libc and BusyBox. The image is only 5 MB in size and has access to a package repository that is much more complete than other BusyBox based images. This makes Alpine Linux a great image base for utilities and even production applications. Read more about Alpine Linux here and you can see how their mantra fits in right at home with Docker images.
 
 ## What is Postgres?
 PostgreSQL, often simply "Postgres", is an object-relational database management system (ORDBMS) with an emphasis on extensibility and standards-compliance. As a database server, its primary function is to store data, securely and supporting best practices, and retrieve it later, as requested by other software applications, be it those on the same computer or those running on another computer across a network (including the Internet). It can handle workloads ranging from small single-machine applications to large Internet-facing applications with many concurrent users. Recent versions also provide replication of the database itself for security and scalability.
 
-## Features
+## ✨ Features
 
-* Minimal size only 10 MB and only 3 layers
-* Memory usage is minimal on Alpine Linux.
+* Minimal size only, minimal layers
+* Memory usage is minimal on a simple install.
 
+## 🏗️ Architectures
 
-## Architectures
-
-* ```:amd64```, ```:latest``` - 64 bit Intel/AMD (x86_64/amd64)
+* ```:amd64```, ```:x86_64``` - 64 bit Intel/AMD (x86_64/amd64)
 * ```:arm64v8```, ```:aarch64``` - 64 bit ARM (ARMv8/aarch64)
 * ```:arm32v7```, ```:armhf``` - 32 bit ARM (ARMv7/armhf)
 
-##### PLEASE CHECK TAGS BELOW FOR SUPPORTED ARCHITECTURES, THE ABOVE IS A LIST OF EXPLANATION
+#### 📝 PLEASE CHECK TAGS BELOW FOR SUPPORTED ARCHITECTURES, THE ABOVE IS A LIST OF EXPLANATION
 
-## Tags
+## 🏷️ Tags
 
 * ```:latest``` latest branch based (Automatic Architecture Selection)
 * ```:master``` master branch usually inline with latest
@@ -43,24 +57,25 @@ PostgreSQL, often simply "Postgres", is an object-relational database management
 * ```:aarch64```, ```:arm64v8``` Armv8 based on latest tag but arm64 architecture
 * ```:armhf```, ```:arm32v7``` Armv7 based on latest tag but arm32 architecture
 
-## Layers & Sizes
+## 📏 Layers & Sizes
 
 ![Version](https://img.shields.io/badge/version-amd64-blue.svg?style=for-the-badge)
-![MicroBadger Layers (tag)](https://img.shields.io/microbadger/layers/yobasystems/alpine-postgres/amd64.svg?style=for-the-badge)
-![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/yobasystems/alpine-postgres/amd64.svg?style=for-the-badge)
+![MicroBadger Layers (tag)](https://img.shields.io/docker/layers/yobasystems/alpine-postgres/amd64.svg?style=for-the-badge)
+![MicroBadger Size (tag)](https://img.shields.io/docker/image-size/yobasystems/alpine-postgres/amd64.svg?style=for-the-badge)
 
 ![Version](https://img.shields.io/badge/version-aarch64-blue.svg?style=for-the-badge)
-![MicroBadger Layers (tag)](https://img.shields.io/microbadger/layers/yobasystems/alpine-postgres/aarch64.svg?style=for-the-badge)
-![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/yobasystems/alpine-postgres/aarch64.svg?style=for-the-badge)
+![MicroBadger Layers (tag)](https://img.shields.io/docker/layers/yobasystems/alpine-postgres/aarch64.svg?style=for-the-badge)
+![MicroBadger Size (tag)](https://img.shields.io/docker/image-size/yobasystems/alpine-postgres/aarch64.svg?style=for-the-badge)
 
 ![Version](https://img.shields.io/badge/version-armhf-blue.svg?style=for-the-badge)
-![MicroBadger Layers (tag)](https://img.shields.io/microbadger/layers/yobasystems/alpine-postgres/armhf.svg?style=for-the-badge)
-![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/yobasystems/alpine-postgres/armhf.svg?style=for-the-badge)
+![MicroBadger Layers (tag)](https://img.shields.io/docker/layers/yobasystems/alpine-postgres/armhf.svg?style=for-the-badge)
+![MicroBadger Size (tag)](https://img.shields.io/docker/image-size/yobasystems/alpine-postgres/armhf.svg?style=for-the-badge)
 
 ## Volume structure
 
 * `/var/lib/postgresql/data`: Database files
 
+## 🚀 How to use this image
 ## Environment Variables:
 
 The PostgreSQL image uses several environment variables which are easy to miss. While none of the variables are required, setting a password as a minimum will ensure some degree of security when using the image.
@@ -93,7 +108,7 @@ It will create a new db called "postgres", with user "postgres" and set root pas
 
 ```yalm
 mysql:
-  image: yobasystems/alpine-postgres
+  image: yobasystems/alpine-postgres:15.4
   environment:
     POSTGRES_DB: salesdb
     POSTGRES_USER: johnsmith
@@ -105,7 +120,13 @@ mysql:
   restart: always
 ```
 
-## Source Repositories
+## 🔍 Image contents & Vulnerability analysis
+
+| PACKAGE NAME          | PACKAGE VERSION | VULNERABILITIES |
+|-----------------------|-----------------|-----------------|
+
+
+## 📚 Source Repositories
 
 * [Github - yobasystems/alpine-postgres](https://github.com/yobasystems/alpine-postgres)
 
@@ -114,14 +135,14 @@ mysql:
 * [Bitbucket - yobasystems/alpine-postgres](https://bitbucket.org/yobasystems/alpine-postgres/)
 
 
-## Container Registries
+## 🐳 Container Registries
 
 * [Dockerhub - yobasystems/alpine-postgres](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
 * [Quay.io - yobasystems/alpine-postgres](https://quay.io/repository/yobasystems/alpine-postgres)
 
 
-## Links
+## 🔗 Links
 
 * [Yoba Systems](https://www.yobasystems.co.uk/)
 
@@ -133,12 +154,10 @@ mysql:
 
 * [Maintainer - Dominic Taylor](https://github.com/dominictayloruk)
 
-## Donation
+## 💰 Donation
 
 [![BMAC](https://img.shields.io/badge/BUY%20ME%20A%20COFFEE-£5-blue.svg?style=for-the-badge&logo=buy-me-a-coffee)](https://www.buymeacoffee.com/dominictayloruk?new=1)
 
-[![BITCOIN](https://img.shields.io/badge/BTC-bc1ql0heex0jxh0yj5cucc83a3x6c6rxuq6x9zk07g-blue.svg?style=for-the-badge&logo=bitcoin)](bitcoin:bc1ql0heex0jxh0yj5cucc83a3x6c6rxuq6x9zk07g)
+[![BITCOIN](https://img.shields.io/badge/BTC-bc1q7hy8qmyvq7rw6slrna7yffcdnj9rcg4e9xjecc-blue.svg?style=for-the-badge&logo=bitcoin)](bitcoin:bc1q7hy8qmyvq7rw6slrna7yffcdnj9rcg4e9xjecc)
 
-[![ETHEREUM](https://img.shields.io/badge/ETH-0x6b707391c60d50E4E414a143446C0b8eF9A2d1c4-blue.svg?style=for-the-badge&logo=ethereum)](https://etherscan.io/address/dominictaylor.eth)
-
-[![STELLAR](https://img.shields.io/badge/XLM-GAREZZW36KF2IT2EJW6LG5HH4XT3QIMWCHMCGEBC6V3AP3EFJCORRZIY-blue.svg?style=for-the-badge&logo=stellar)](https://keybase.io/dominictayloruk)
+[![ETHEREUM](https://img.shields.io/badge/ETH-0xb6bE2e4da3d86b50Bdae1F9B6960c23dd87C532C-blue.svg?style=for-the-badge&logo=ethereum)](ethereum:0xb6bE2e4da3d86b50Bdae1F9B6960c23dd87C532C)
