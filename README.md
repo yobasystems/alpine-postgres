@@ -4,14 +4,14 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
-[![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.18.4-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
-[![Postgres Version](https://img.shields.io/badge/Postgres%20version-v15.4-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
+[![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.19.0-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
+[![Postgres Version](https://img.shields.io/badge/Postgres%20version-v15.5-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
 
 
-This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 15.4](https://www.postgresql.org/) object-relational database server.
+This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 15.5](https://www.postgresql.org/) object-relational database server.
 
-### Alpine Version 3.18.4 (Released 2023-09-28)
-##### Postgres Version 15.4
+### Alpine Version 3.19.0 (Released 2023-12-07)
+##### Postgres Version 15.5
 
 ----
 
@@ -108,7 +108,7 @@ It will create a new db called "postgres", with user "postgres" and set root pas
 
 ```yalm
 mysql:
-  image: yobasystems/alpine-postgres:15.4
+  image: yobasystems/alpine-postgres:15.5
   environment:
     POSTGRES_DB: salesdb
     POSTGRES_USER: johnsmith

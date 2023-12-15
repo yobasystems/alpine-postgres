@@ -1,18 +1,18 @@
-FROM yobasystems/alpine:3.18.4-aarch64
+FROM yobasystems/alpine:3.19.0-aarch64
 
 ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Dominic Taylor <dominic@yoba.systems>" \
     architecture="arm64v8/aarch64" \
-    postgres-version="15.4" \
-    alpine-version="3.18.4" \
-    build="04-Oct-2023" \
+    postgres-version="15.5" \
+    alpine-version="3.19.0" \
+    build="15-Dec-2023" \
     org.opencontainers.image.title="alpine-postgres" \
     org.opencontainers.image.description="Postgresql container image running on Alpine Linux" \
     org.opencontainers.image.authors="Dominic Taylor <dominic@yoba.systems>" \
     org.opencontainers.image.vendor="Yoba Systems" \
-    org.opencontainers.image.version="v15.4" \
+    org.opencontainers.image.version="v15.5" \
     org.opencontainers.image.url="https://hub.docker.com/r/yobasystems/alpine-postgres/" \
     org.opencontainers.image.source="https://github.com/yobasystems/alpine-postgres" \
     org.opencontainers.image.revision=$VCS_REF \
