@@ -5,14 +5,14 @@ ARG VCS_REF
 
 LABEL maintainer="Dominic Taylor <dominic@yoba.systems>" \
     architecture="amd64/x86_64" \
-    postgres-version="15.5" \
+    postgres-version="16.1" \
     alpine-version="3.19.0" \
     build="15-Dec-2023" \
     org.opencontainers.image.title="alpine-postgres" \
     org.opencontainers.image.description="Postgresql container image running on Alpine Linux" \
     org.opencontainers.image.authors="Dominic Taylor <dominic@yoba.systems>" \
     org.opencontainers.image.vendor="Yoba Systems" \
-    org.opencontainers.image.version="v15.5" \
+    org.opencontainers.image.version="v16.1" \
     org.opencontainers.image.url="https://hub.docker.com/r/yobasystems/alpine-postgres/" \
     org.opencontainers.image.source="https://github.com/yobasystems/alpine-postgres" \
     org.opencontainers.image.revision=$VCS_REF \
@@ -22,7 +22,7 @@ ENV LANG en_GB.utf8
 ENV PGDATA /var/lib/postgresql/data
 
 RUN apk update && \
-    apk add su-exec tzdata libpq postgresql15 postgresql-url_encode && \
+    apk add su-exec tzdata libpq postgresql16 postgresql-url_encode && \
     mkdir /docker-entrypoint-initdb.d && \
     rm -rf /var/cache/apk/*
 
