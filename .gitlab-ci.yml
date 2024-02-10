@@ -31,8 +31,7 @@ amd64 postgres build:
     --build-arg BUILD_DATE=${COMMIT_TIME} -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:amd64
     -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:x86_64 -t $DOCKER_REGISTRY_DOCKERHUB_REPO:amd64
     -t $DOCKER_REGISTRY_DOCKERHUB_REPO:x86_64 -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:amd64
-    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:x86_64 -t ${CI_APPLICATION_REPOSITORY}:${CI_APPLICATION_TAG}
-    .
+    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:x86_64 -t ${CI_APPLICATION_REPOSITORY}:${CI_APPLICATION_TAG} --platform linux/amd64 .
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:amd64
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:x86_64
   - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
@@ -61,7 +60,7 @@ arm32v7 postgres build:
     --build-arg BUILD_DATE=${COMMIT_TIME} -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:arm32v7
     -t $DOCKER_REGISTRY_DOCKERHUB_REPO:arm32v7 -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:arm32v7
     -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:armhf -t $DOCKER_REGISTRY_DOCKERHUB_REPO:armhf
-    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:armhf .
+    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:armhf --platform linux/arm/v7 .
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:arm32v7
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:armhf
   - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
@@ -89,7 +88,7 @@ arm64v8 postgres build:
     --build-arg BUILD_DATE=${COMMIT_TIME} -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:arm64v8
     -t $DOCKER_REGISTRY_DOCKERHUB_REPO:arm64v8 -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:arm64v8
     -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:aarch64 -t $DOCKER_REGISTRY_DOCKERHUB_REPO:aarch64
-    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:aarch64 .
+    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:aarch64 --platform linux/arm64/v8 .
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:arm64v8
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:aarch64
   - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
@@ -117,7 +116,7 @@ amd64 postgres version build:
     --build-arg BUILD_DATE=${COMMIT_TIME} -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-amd64
     -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-x86_64 -t $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-amd64
     -t $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-x86_64 -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:16.1-amd64
-    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:16.1-x86_64 .
+    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:16.1-x86_64 --platform linux/amd64 .
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-amd64
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-x86_64
   - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
@@ -145,7 +144,7 @@ arm32v7 postgres version build:
     --build-arg BUILD_DATE=${COMMIT_TIME} -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-arm32v7
     -t $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-arm32v7 -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:16.1-arm32v7
     -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-armhf -t $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-armhf
-    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:16.1-armhf .
+    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:16.1-armhf --platform linux/arm/v7 .
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-arm32v7
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-armhf
   - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
@@ -173,7 +172,7 @@ arm64v8 postgres version build:
     --build-arg BUILD_DATE=${COMMIT_TIME} -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-arm64v8
     -t $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-arm64v8 -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:16.1-arm64v8
     -t $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-aarch64 -t $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-aarch64
-    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:16.1-aarch64 .
+    -t $DOCKER_REGISTRY_QUAY/$DOCKER_REGISTRY_QUAY_REPO:16.1-aarch64 --platform linux/arm64/v8 .
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-arm64v8
   - docker push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-aarch64
   - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
@@ -201,9 +200,9 @@ gitlab latest manifest creation:
   - docker manifest annotate $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:latest $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:amd64
     --os linux --arch amd64
   - docker manifest annotate $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:latest $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:arm32v7
-    --os linux --arch arm
+    --os linux --arch arm --variant 7
   - docker manifest annotate $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:latest $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:arm64v8
-    --os linux --arch arm64
+    --os linux --arch arm64 --variant 8
   - docker manifest push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:latest
 dockerhub latest manifest creation:
   image: yobasystems/alpine-docker:dind
@@ -222,9 +221,9 @@ dockerhub latest manifest creation:
   - docker manifest annotate $DOCKER_REGISTRY_DOCKERHUB_REPO:latest $DOCKER_REGISTRY_DOCKERHUB_REPO:amd64
     --os linux --arch amd64
   - docker manifest annotate $DOCKER_REGISTRY_DOCKERHUB_REPO:latest $DOCKER_REGISTRY_DOCKERHUB_REPO:arm32v7
-    --os linux --arch arm
+    --os linux --arch arm --variant 7
   - docker manifest annotate $DOCKER_REGISTRY_DOCKERHUB_REPO:latest $DOCKER_REGISTRY_DOCKERHUB_REPO:arm64v8
-    --os linux --arch arm64
+    --os linux --arch arm64 --variant 8
   - docker manifest push $DOCKER_REGISTRY_DOCKERHUB_REPO:latest
 gitlab version 16.1 manifest creation:
   image: yobasystems/alpine-docker:dind
@@ -243,9 +242,9 @@ gitlab version 16.1 manifest creation:
   - docker manifest annotate $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1 $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-amd64
     --os linux --arch amd64
   - docker manifest annotate $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1 $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-arm32v7
-    --os linux --arch arm
+    --os linux --arch arm --variant 7
   - docker manifest annotate $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1 $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-arm64v8
-    --os linux --arch arm64
+    --os linux --arch arm64 --variant 8
   - docker manifest push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1
 dockerhub version 16.1 manifest creation:
   image: yobasystems/alpine-docker:dind
@@ -264,9 +263,9 @@ dockerhub version 16.1 manifest creation:
   - docker manifest annotate $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1 $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-amd64
     --os linux --arch amd64
   - docker manifest annotate $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1 $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-arm32v7
-    --os linux --arch arm
+    --os linux --arch arm --variant 7
   - docker manifest annotate $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1 $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-arm64v8
-    --os linux --arch arm64
+    --os linux --arch arm64 --variant 8
   - docker manifest push $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1
 gitlab major version 16 manifest creation:
   image: yobasystems/alpine-docker:dind
@@ -285,9 +284,9 @@ gitlab major version 16 manifest creation:
   - docker manifest annotate $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16 $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-amd64
     --os linux --arch amd64
   - docker manifest annotate $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16 $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-arm32v7
-    --os linux --arch arm
+    --os linux --arch arm --variant 7
   - docker manifest annotate $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16 $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16.1-arm64v8
-    --os linux --arch arm64
+    --os linux --arch arm64 --variant 8
   - docker manifest push $DOCKER_REGISTRY/$DOCKER_REGISTRY_REPO:16
 dockerhub major version 16 manifest creation:
   image: yobasystems/alpine-docker:dind
@@ -306,9 +305,9 @@ dockerhub major version 16 manifest creation:
   - docker manifest annotate $DOCKER_REGISTRY_DOCKERHUB_REPO:16 $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-amd64
     --os linux --arch amd64
   - docker manifest annotate $DOCKER_REGISTRY_DOCKERHUB_REPO:16 $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-arm32v7
-    --os linux --arch arm
+    --os linux --arch arm --variant 7
   - docker manifest annotate $DOCKER_REGISTRY_DOCKERHUB_REPO:16 $DOCKER_REGISTRY_DOCKERHUB_REPO:16.1-arm64v8
-    --os linux --arch arm64
+    --os linux --arch arm64 --variant 8
   - docker manifest push $DOCKER_REGISTRY_DOCKERHUB_REPO:16
 sast:
   stage: test
