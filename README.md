@@ -4,13 +4,13 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
-[![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.19.3-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
+[![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.20.2-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
 [![Postgres Version](https://img.shields.io/badge/Postgres%20version-v16.3-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
 
 
 This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 16.3](https://www.postgresql.org/) object-relational database server.
 
-### Alpine Version 3.19.3 (Released 2024-07-22)
+### Alpine Version 3.20.2 (Released 2024-07-22)
 ##### Postgres Version 16.3
 
 ----
