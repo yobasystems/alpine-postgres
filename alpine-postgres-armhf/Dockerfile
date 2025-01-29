@@ -1,21 +1,21 @@
-FROM yobasystems/alpine:3.20.2-armhf
+FROM yobasystems/alpine:3.21.1-armhf
 
 ARG BUILD_DATE
 ARG VCS_REF
 
 LABEL maintainer="Dominic Taylor <dominic@yoba.systems>" \
     architecture="arm32v7/armhf" \
-    postgres-version="16.3" \
-    alpine-version="3.20.2" \
-    build="19-Aug-2024" \
+    postgres-version="16.6" \
+    alpine-version="3.21.1" \
+    build="29-Jan-2025" \
     org.opencontainers.image.title="alpine-postgres" \
     org.opencontainers.image.description="Postgresql container image running on Alpine Linux" \
     org.opencontainers.image.authors="Dominic Taylor <dominic@yoba.systems>" \
     org.opencontainers.image.vendor="Yoba Systems" \
-    org.opencontainers.image.version="16.3" \
+    org.opencontainers.image.version="16.6" \
     org.opencontainers.image.url="https://hub.docker.com/r/yobasystems/alpine-postgres/" \
     org.opencontainers.image.source="https://github.com/yobasystems/alpine-postgres" \
-    org.opencontainers.image.base.name="docker.io/yobasystems/alpine:3.20.2" \
+    org.opencontainers.image.base.name="docker.io/yobasystems/alpine:3.21.1" \
     org.opencontainers.image.revision=$VCS_REF \
     org.opencontainers.image.created=$BUILD_DATE
 

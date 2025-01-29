@@ -4,14 +4,14 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
-[![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.20.2-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
-[![Postgres Version](https://img.shields.io/badge/Postgres%20version-v16.3-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
+[![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.21.1-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
+[![Postgres Version](https://img.shields.io/badge/Postgres%20version-v16.6-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
 
 
-This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 16.3](https://www.postgresql.org/) object-relational database server.
+This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 16.6](https://www.postgresql.org/) object-relational database server.
 
-### Alpine Version 3.20.2 (Released 2024-07-22)
-##### Postgres Version 16.3
+### Alpine Version 3.21.1 (Released 2025-01-06)
+##### Postgres Version 16.6.0
 
 ----
 
@@ -52,7 +52,8 @@ PostgreSQL, often simply "Postgres", is an object-relational database management
 ## 🏷️ Tags
 
 * ```:latest``` latest branch based (Automatic Architecture Selection)
-* ```:master``` master branch usually inline with latest
+* ```:main``` main branch usually inline with latest
+* ```:16.6.0``` main branch usually inline with latest
 * ```:amd64```, ```:x86_64```  amd64 based on latest tag but amd64 architecture
 * ```:aarch64```, ```:arm64v8``` Armv8 based on latest tag but arm64 architecture
 * ```:armhf```, ```:arm32v7``` Armv7 based on latest tag but arm32 architecture
@@ -108,7 +109,7 @@ It will create a new db called "postgres", with user "postgres" and set root pas
 
 ```yalm
 mysql:
-  image: yobasystems/alpine-postgres:16.3
+  image: yobasystems/alpine-postgres:16.6
   environment:
     POSTGRES_DB: salesdb
     POSTGRES_USER: johnsmith
@@ -129,29 +130,24 @@ mysql:
 ## 📚 Source Repositories
 
 * [Github - yobasystems/alpine-postgres](https://github.com/yobasystems/alpine-postgres)
-
 * [Gitlab - yobasystems/alpine-postgres](https://gitlab.com/yobasystems/alpine-postgres)
-
 * [Bitbucket - yobasystems/alpine-postgres](https://bitbucket.org/yobasystems/alpine-postgres/)
 
 
 ## 🐳 Container Registries
 
 * [Dockerhub - yobasystems/alpine-postgres](https://hub.docker.com/r/yobasystems/alpine-postgres/)
-
 * [Quay.io - yobasystems/alpine-postgres](https://quay.io/repository/yobasystems/alpine-postgres)
+* [GHCR - yobasystems/alpine-postgres](https://ghcr.io/yobasystems/alpine-postgres)
 
 
 ## 🔗 Links
 
-* [Yoba Systems](https://www.yobasystems.co.uk/)
-
+* [Yoba Systems](https://yoba.systems/)
 * [Github - Yoba Systems](https://github.com/yobasystems/)
-
 * [Dockerhub - Yoba Systems](https://hub.docker.com/u/yobasystems/)
-
 * [Quay.io - Yoba Systems](https://quay.io/organization/yobasystems)
-
+* [GHCR - Yoba Systems](https://ghcr.io/yobasystems)
 * [Maintainer - Dominic Taylor](https://github.com/dominictayloruk)
 
 ## 💰 Donation
