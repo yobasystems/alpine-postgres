@@ -4,14 +4,14 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
-[![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.22.0-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
-[![Postgres Version](https://img.shields.io/badge/Postgres%20version-v16.9-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
+[![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.22.1-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
+[![Postgres Version](https://img.shields.io/badge/Postgres%20version-v17.5-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
 
 
-This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 16.9](https://www.postgresql.org/) object-relational database server.
+This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 17.5](https://www.postgresql.org/) object-relational database server.
 
-### Alpine Version 3.22.0 (Released 2025-05-30)
-##### Postgres Version 16.9.0
+### Alpine Version 3.22.1 (Released 2025-07-15)
+##### Postgres Version 17.5
 
 ----
 
@@ -53,7 +53,7 @@ PostgreSQL, often simply "Postgres", is an object-relational database management
 
 * ```:latest``` latest branch based (Automatic Architecture Selection)
 * ```:main``` main branch usually inline with latest
-* ```:16.9.0``` main branch usually inline with latest
+* ```:17.5.0``` main branch usually inline with latest
 * ```:amd64```, ```:x86_64```  amd64 based on latest tag but amd64 architecture
 * ```:aarch64```, ```:arm64v8``` Armv8 based on latest tag but arm64 architecture
 * ```:armhf```, ```:arm32v7``` Armv7 based on latest tag but arm32 architecture
@@ -109,7 +109,7 @@ It will create a new db called "postgres", with user "postgres" and set root pas
 
 ```yalm
 mysql:
-  image: yobasystems/alpine-postgres:16.9
+  image: yobasystems/alpine-postgres:17.5
   environment:
     POSTGRES_DB: salesdb
     POSTGRES_USER: johnsmith
