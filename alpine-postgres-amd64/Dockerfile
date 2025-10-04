@@ -5,14 +5,14 @@ ARG VCS_REF
 
 LABEL maintainer="Dominic Taylor <dominic@yoba.systems>" \
     architecture="amd64/x86_64" \
-    postgres-version="17.5" \
+    postgres-version="17.6" \
     alpine-version="3.22.1" \
-    build="03-Aug-2025" \
+    build="04-Oct-2025" \
     org.opencontainers.image.title="alpine-postgres" \
     org.opencontainers.image.description="Postgresql container image running on Alpine Linux" \
     org.opencontainers.image.authors="Dominic Taylor <dominic@yoba.systems>" \
     org.opencontainers.image.vendor="Yoba Systems" \
-    org.opencontainers.image.version="17.5" \
+    org.opencontainers.image.version="17.6" \
     org.opencontainers.image.url="https://hub.docker.com/r/yobasystems/alpine-postgres/" \
     org.opencontainers.image.source="https://github.com/yobasystems/alpine-postgres" \
     org.opencontainers.image.base.name="docker.io/yobasystems/alpine:3.22.1" \
