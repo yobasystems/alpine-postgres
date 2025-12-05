@@ -1,13 +1,13 @@
 stages:
-- build
-- test
-- deploy
-- manifest
+  - build
+  - test
+  - deploy
+  - manifest
 
 include:
-- remote: https://gitlab.com/yobasystems/gitlab-ci-templates/raw/master/container_scanning_all_arch.yml
-- template: Jobs/Secret-Detection.gitlab-ci.yml
-- template: Jobs/SAST.gitlab-ci.yml
+  - remote: https://gitlab.com/yobasystems/gitlab-ci-templates/raw/master/container_scanning_all_arch.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/SAST.gitlab-ci.yml
 
 .build_template: &build_definition
   image: yobasystems/alpine-docker:dind
