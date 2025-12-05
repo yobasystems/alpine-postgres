@@ -5,15 +5,15 @@
 [![Docker Stars](https://img.shields.io/docker/stars/yobasystems/alpine-postgres.svg?style=for-the-badge&logo=docker)](https://hub.docker.com/r/yobasystems/alpine-postgres/)
 
 [![Alpine Version](https://img.shields.io/badge/Alpine%20version-v3.23.0-green.svg?style=for-the-badge&logo=alpine-linux)](https://alpinelinux.org/)
-[![Postgres Version](https://img.shields.io/badge/Postgres%20version-v17.7-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
+[![Postgres Version](https://img.shields.io/badge/Postgres%20version-v18.1-green.svg?style=for-the-badge&logo=postgres)](https://www.postgresql.org/)
 
 This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yobasystems/alpine-postgres/) is based on the minimal [Alpine Linux](http://alpinelinux.org/) with [Postgres 17.7](https://www.postgresql.org/) object-relational database server.
 
 ### Alpine Version 3.23.0 (Released 2025-12-03)
 
 ##### Postgres Version 16.11
-##### Postgres Version 17.7
-##### Postgres Version 18.1
+##### Postgres Version 17.7 
+##### Postgres Version 18.1 (Latest)
 
 ---
 
@@ -56,7 +56,7 @@ PostgreSQL, often simply "Postgres", is an object-relational database management
 
 - `:latest` latest branch based (Automatic Architecture Selection)
 - `:main` main branch usually inline with latest
-- `:17.7.0` main branch usually inline with latest
+- `:x.y.z` main branch usually inline with latest
 - `:amd64`, `:x86_64` amd64 based on latest tag but amd64 architecture
 - `:aarch64`, `:arm64v8` Armv8 based on latest tag but arm64 architecture
 - `:armhf`, `:arm32v7` Armv7 based on latest tag but arm32 architecture
@@ -109,7 +109,7 @@ It will create a new db called "postgres", with user "postgres" and set root pas
 ####(Please pass your own credentials, don't use these ones for production!!)
 
 ```yalm
-mysql:
+postgres:
   image: yobasystems/alpine-postgres:17.7
   environment:
     POSTGRES_DB: salesdb
@@ -118,7 +118,7 @@ mysql:
   expose:
     - "5432"
   volumes:
-    - /data/postgres/pgdata:/var/lib/postgresql/data
+    - /data/host/pgdata:/var/lib/postgresql/data
   restart: always
 ```
 

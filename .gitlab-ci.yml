@@ -28,15 +28,15 @@ variables:
       case "${PG_VERSION}" in
         "16")
           export PG_FULL_VERSION="${PG16_FULL_VERSION}"
-          export URL_ENCODE_REPO="https://dl-cdn.alpinelinux.org/alpine/v3.20/community"
+          export EXTENSIONS_REPO="https://dl-cdn.alpinelinux.org/alpine/v3.20/community"
           ;;
         "17")
           export PG_FULL_VERSION="${PG17_FULL_VERSION}"
-          export URL_ENCODE_REPO="https://dl-cdn.alpinelinux.org/alpine/v3.22/community"
+          export EXTENSIONS_REPO="https://dl-cdn.alpinelinux.org/alpine/v3.22/community"
           ;;
         "18")
           export PG_FULL_VERSION="${PG18_FULL_VERSION}"
-          export URL_ENCODE_REPO="https://dl-cdn.alpinelinux.org/alpine/v3.23/community"
+          export EXTENSIONS_REPO="https://dl-cdn.alpinelinux.org/alpine/v3.23/community"
           ;;
       esac
     - apk add --update git
@@ -46,7 +46,7 @@ variables:
       --build-arg BUILD_DATE=${CI_COMMIT_TIMESTAMP}
       --build-arg POSTGRES_VERSION=${PG_VERSION}
       --build-arg POSTGRES_FULL_VERSION=${PG_FULL_VERSION}
-      --build-arg URL_ENCODE_REPO=${URL_ENCODE_REPO}
+      --build-arg EXTENSIONS_REPO=${EXTENSIONS_REPO}
       -t ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH}
       --platform linux/${PLATFORM}
       .
@@ -421,10 +421,10 @@ manifest_creation_latest:
         docker manifest annotate $repo:$tag $repo:${pg_ver}-aarch64 --os linux --arch arm64 --variant v8
         docker manifest push $repo:$tag
       }
-    # Latest tag points to PostgreSQL 17 (current stable)
+    # Latest tag points to PostgreSQL 18 (current stable)
     - |
       for repo in $CI_REGISTRY_IMAGE $DOCKER_REGISTRY_DOCKERHUB_REPO quay.io/$DOCKER_REGISTRY_QUAY_REPO ghcr.io/$DOCKER_REGISTRY_GHCR_REPO; do
-        create_and_push_manifest $repo latest 17
+        create_and_push_manifest $repo latest 18
       done
 
 manifest_creation_version:

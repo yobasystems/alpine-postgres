@@ -2,8 +2,8 @@ FROM yobasystems/alpine:3.23.0-armhf
 
 ARG BUILD_DATE
 ARG VCS_REF
-ARG POSTGRES_VERSION=17
-ARG POSTGRES_FULL_VERSION=17.7
+ARG POSTGRES_VERSION=18
+ARG POSTGRES_FULL_VERSION=18.1
 
 LABEL maintainer="Dominic Taylor <dominic@yoba.systems>" \
     architecture="arm32v7/armhf" \
@@ -25,11 +25,11 @@ ENV LANG=en_GB.utf8
 ENV PGDATA=/var/lib/postgresql/data
 
 # postgresql-url_encode versions: PG16=alpine 3.20, PG17=alpine 3.22, PG18=alpine 3.23
-ARG URL_ENCODE_REPO=https://dl-cdn.alpinelinux.org/alpine/v3.23/community
+ARG EXTENSIONS_REPO=https://dl-cdn.alpinelinux.org/alpine/v3.23/community
 RUN apk update && \
     apk add su-exec postgresql${POSTGRES_VERSION} && \
-    echo "@urlencode ${URL_ENCODE_REPO}" >> /etc/apk/repositories && \
-    apk add postgresql-url_encode@urlencode && \
+    echo "@extensions ${EXTENSIONS_REPO}" >> /etc/apk/repositories && \
+    apk add postgresql-url_encode@extensions postgresql-pgvector@extensions postgresql-hypopg@extensions postgresql-pg_cron@extensions && \
     mkdir /docker-entrypoint-initdb.d && \
     rm -rf /var/cache/apk/*
 
