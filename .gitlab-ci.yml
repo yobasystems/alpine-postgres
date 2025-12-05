@@ -9,47 +9,127 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST.gitlab-ci.yml
 
+variables:
+  # PostgreSQL version matrix - update these when new versions are released
+  PG16_FULL_VERSION: "16.11"
+  PG17_FULL_VERSION: "17.7"
+  PG18_FULL_VERSION: "18.1"
+
+# =============================================================================
+# BUILD STAGE
+# =============================================================================
 .build_template: &build_definition
   image: yobasystems/alpine-docker:dind
   stage: build
   script:
     - echo "Build Timestamp ${CI_COMMIT_TIMESTAMP} - ${CI_COMMIT_SHORT_SHA}"
-    - echo "Building for ARCH=${ARCH}, PLATFORM=${PLATFORM}"
+    - echo "Building for ARCH=${ARCH}, PLATFORM=${PLATFORM}, PG_VERSION=${PG_VERSION}"
+    - |
+      case "${PG_VERSION}" in
+        "16") export PG_FULL_VERSION="${PG16_FULL_VERSION}" ;;
+        "17") export PG_FULL_VERSION="${PG17_FULL_VERSION}" ;;
+        "18") export PG_FULL_VERSION="${PG18_FULL_VERSION}" ;;
+      esac
     - apk add --update git
     - cd alpine-postgres-${ARCH}/
     - docker build
       --build-arg VCS_REF=${CI_COMMIT_SHORT_SHA}
       --build-arg BUILD_DATE=${CI_COMMIT_TIMESTAMP}
-      -t ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH}
+      --build-arg POSTGRES_VERSION=${PG_VERSION}
+      --build-arg POSTGRES_FULL_VERSION=${PG_FULL_VERSION}
+      -t ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH}
       --platform linux/${PLATFORM}
       .
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token "$CI_REGISTRY" --password-stdin
-    - docker push ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH}
+    - docker push ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH}
 
-amd64_postgres_build:
+# AMD64 builds
+amd64_pg16_build:
   <<: *build_definition
   tags:
     - amd64
   variables:
     ARCH: amd64
     PLATFORM: amd64
+    PG_VERSION: "16"
 
-arm32v7_postgres_build:
+amd64_pg17_build:
+  <<: *build_definition
+  tags:
+    - amd64
+  variables:
+    ARCH: amd64
+    PLATFORM: amd64
+    PG_VERSION: "17"
+
+amd64_pg18_build:
+  <<: *build_definition
+  tags:
+    - amd64
+  variables:
+    ARCH: amd64
+    PLATFORM: amd64
+    PG_VERSION: "18"
+
+# ARM32v7 builds
+arm32v7_pg16_build:
   <<: *build_definition
   tags:
     - armhf
   variables:
     ARCH: armhf
     PLATFORM: arm/v7
+    PG_VERSION: "16"
 
-arm64v8_postgres_build:
+arm32v7_pg17_build:
+  <<: *build_definition
+  tags:
+    - armhf
+  variables:
+    ARCH: armhf
+    PLATFORM: arm/v7
+    PG_VERSION: "17"
+
+arm32v7_pg18_build:
+  <<: *build_definition
+  tags:
+    - armhf
+  variables:
+    ARCH: armhf
+    PLATFORM: arm/v7
+    PG_VERSION: "18"
+
+# ARM64v8 builds
+arm64v8_pg16_build:
   <<: *build_definition
   tags:
     - aarch64
   variables:
     ARCH: aarch64
     PLATFORM: arm64/v8
+    PG_VERSION: "16"
 
+arm64v8_pg17_build:
+  <<: *build_definition
+  tags:
+    - aarch64
+  variables:
+    ARCH: aarch64
+    PLATFORM: arm64/v8
+    PG_VERSION: "17"
+
+arm64v8_pg18_build:
+  <<: *build_definition
+  tags:
+    - aarch64
+  variables:
+    ARCH: aarch64
+    PLATFORM: arm64/v8
+    PG_VERSION: "18"
+
+# =============================================================================
+# TEST STAGE - Container Scanning
+# =============================================================================
 container_scanning_amd64:
   tags:
     - amd64
@@ -80,6 +160,9 @@ sbom_aarch64:
   tags:
     - aarch64
 
+# =============================================================================
+# DEPLOY STAGE
+# =============================================================================
 .deploy_template: &deploy_definition
   image: yobasystems/alpine-docker:dind
   stage: deploy
@@ -91,44 +174,47 @@ sbom_aarch64:
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     - echo "$QUAY_PASSWORD" | docker login -u "$QUAY_USERNAME" quay.io --password-stdin
     - echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
-    - docker pull ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH}
-    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} $CI_REGISTRY_IMAGE:${ARCH}
-    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${ARCH}
-    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${ARCH}
-    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${ARCH}
-    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} $CI_REGISTRY_IMAGE:${ARCH2}
-    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${ARCH2}
-    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${ARCH2}
-    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${ARCH2}
-    - docker push $CI_REGISTRY_IMAGE:${ARCH}
-    - docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${ARCH}
-    - docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${ARCH}
-    - docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${ARCH}
-    - docker push $CI_REGISTRY_IMAGE:${ARCH2}
-    - docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${ARCH2}
-    - docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${ARCH2}
-    - docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${ARCH2}
+    - docker pull ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH}
+    # Tag with pg version prefix
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $CI_REGISTRY_IMAGE:${PG_VERSION}-${ARCH}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_VERSION}-${ARCH}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_VERSION}-${ARCH}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_VERSION}-${ARCH}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $CI_REGISTRY_IMAGE:${PG_VERSION}-${ARCH2}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_VERSION}-${ARCH2}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_VERSION}-${ARCH2}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_VERSION}-${ARCH2}
+    # Push all tags
+    - docker push $CI_REGISTRY_IMAGE:${PG_VERSION}-${ARCH}
+    - docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_VERSION}-${ARCH}
+    - docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_VERSION}-${ARCH}
+    - docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_VERSION}-${ARCH}
+    - docker push $CI_REGISTRY_IMAGE:${PG_VERSION}-${ARCH2}
+    - docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_VERSION}-${ARCH2}
+    - docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_VERSION}-${ARCH2}
+    - docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_VERSION}-${ARCH2}
     - |
       if [[ "$CI_COMMIT_TAG" ]]; then
-        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG}-${ARCH}
-        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${CI_COMMIT_TAG}-${ARCH}
-        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${CI_COMMIT_TAG}-${ARCH}
-        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${CI_COMMIT_TAG}-${ARCH}
-        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG}-${ARCH2}
-        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${CI_COMMIT_TAG}-${ARCH2}
-        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${CI_COMMIT_TAG}-${ARCH2}
-        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${CI_COMMIT_TAG}-${ARCH2}
-        docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG}-${ARCH}
-        docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${CI_COMMIT_TAG}-${ARCH}
-        docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${CI_COMMIT_TAG}-${ARCH}
-        docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${CI_COMMIT_TAG}-${ARCH}
-        docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG}-${ARCH2}
-        docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${CI_COMMIT_TAG}-${ARCH2}
-        docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${CI_COMMIT_TAG}-${ARCH2}
-        docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${CI_COMMIT_TAG}-${ARCH2}
+        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH}
+        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH}
+        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH}
+        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH}
+        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH2}
+        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH2}
+        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH2}
+        docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH2}
+        docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH}
+        docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH}
+        docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH}
+        docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH}
+        docker push $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH2}
+        docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH2}
+        docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH2}
+        docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH2}
       fi
 
-amd64_postgres_deploy:
+# AMD64 deploys
+amd64_pg16_deploy:
   <<: *deploy_definition
   tags:
     - amd64
@@ -136,12 +222,42 @@ amd64_postgres_deploy:
     ARCH: amd64
     ARCH2: x86_64
     PLATFORM: amd64
+    PG_VERSION: "16"
   needs:
-    - amd64_postgres_build
+    - amd64_pg16_build
     - container_scanning_amd64
     - sbom_amd64
 
-arm32v7_postgres_deploy:
+amd64_pg17_deploy:
+  <<: *deploy_definition
+  tags:
+    - amd64
+  variables:
+    ARCH: amd64
+    ARCH2: x86_64
+    PLATFORM: amd64
+    PG_VERSION: "17"
+  needs:
+    - amd64_pg17_build
+    - container_scanning_amd64
+    - sbom_amd64
+
+amd64_pg18_deploy:
+  <<: *deploy_definition
+  tags:
+    - amd64
+  variables:
+    ARCH: amd64
+    ARCH2: x86_64
+    PLATFORM: amd64
+    PG_VERSION: "18"
+  needs:
+    - amd64_pg18_build
+    - container_scanning_amd64
+    - sbom_amd64
+
+# ARM32v7 deploys
+arm32v7_pg16_deploy:
   <<: *deploy_definition
   tags:
     - armhf
@@ -149,12 +265,42 @@ arm32v7_postgres_deploy:
     ARCH: armhf
     ARCH2: arm32v7
     PLATFORM: arm/v7
+    PG_VERSION: "16"
   needs:
-    - arm32v7_postgres_build
+    - arm32v7_pg16_build
     - container_scanning_armhf
     - sbom_armhf
 
-arm64v8_postgres_deploy:
+arm32v7_pg17_deploy:
+  <<: *deploy_definition
+  tags:
+    - armhf
+  variables:
+    ARCH: armhf
+    ARCH2: arm32v7
+    PLATFORM: arm/v7
+    PG_VERSION: "17"
+  needs:
+    - arm32v7_pg17_build
+    - container_scanning_armhf
+    - sbom_armhf
+
+arm32v7_pg18_deploy:
+  <<: *deploy_definition
+  tags:
+    - armhf
+  variables:
+    ARCH: armhf
+    ARCH2: arm32v7
+    PLATFORM: arm/v7
+    PG_VERSION: "18"
+  needs:
+    - arm32v7_pg18_build
+    - container_scanning_armhf
+    - sbom_armhf
+
+# ARM64v8 deploys
+arm64v8_pg16_deploy:
   <<: *deploy_definition
   tags:
     - aarch64
@@ -162,71 +308,134 @@ arm64v8_postgres_deploy:
     ARCH: aarch64
     ARCH2: arm64v8
     PLATFORM: arm64/v8
+    PG_VERSION: "16"
   needs:
-    - arm64v8_postgres_build
+    - arm64v8_pg16_build
     - container_scanning_aarch64
     - sbom_aarch64
 
-manifest_creation_latest:
+arm64v8_pg17_deploy:
+  <<: *deploy_definition
+  tags:
+    - aarch64
+  variables:
+    ARCH: aarch64
+    ARCH2: arm64v8
+    PLATFORM: arm64/v8
+    PG_VERSION: "17"
+  needs:
+    - arm64v8_pg17_build
+    - container_scanning_aarch64
+    - sbom_aarch64
+
+arm64v8_pg18_deploy:
+  <<: *deploy_definition
+  tags:
+    - aarch64
+  variables:
+    ARCH: aarch64
+    ARCH2: arm64v8
+    PLATFORM: arm64/v8
+    PG_VERSION: "18"
+  needs:
+    - arm64v8_pg18_build
+    - container_scanning_aarch64
+    - sbom_aarch64
+
+# =============================================================================
+# MANIFEST STAGE
+# =============================================================================
+.manifest_template: &manifest_definition
   image: yobasystems/alpine-docker:dind
   stage: manifest
-  needs:
-    - amd64_postgres_deploy
-    - arm32v7_postgres_deploy
-    - arm64v8_postgres_deploy
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-  script:
+  before_script:
     - mkdir -p ~/.docker
     - echo '{"experimental":"enabled"}' > ~/.docker/config.json
     - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token "$CI_REGISTRY" --password-stdin
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     - echo "$QUAY_PASSWORD" | docker login -u "$QUAY_USERNAME" quay.io --password-stdin
     - echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
+
+manifest_creation_pg_versions:
+  <<: *manifest_definition
+  needs:
+    - amd64_pg16_deploy
+    - amd64_pg17_deploy
+    - amd64_pg18_deploy
+    - arm32v7_pg16_deploy
+    - arm32v7_pg17_deploy
+    - arm32v7_pg18_deploy
+    - arm64v8_pg16_deploy
+    - arm64v8_pg17_deploy
+    - arm64v8_pg18_deploy
+  script:
     - |
       create_and_push_manifest() {
         repo=$1
         tag=$2
         docker manifest create $repo:$tag \
-          $repo:amd64 \
-          $repo:armhf \
-          $repo:aarch64
-        docker manifest annotate $repo:$tag $repo:amd64 --os linux --arch amd64
-        docker manifest annotate $repo:$tag $repo:armhf --os linux --arch arm --variant v7
-        docker manifest annotate $repo:$tag $repo:aarch64 --os linux --arch arm64 --variant v8
+          $repo:${tag}-amd64 \
+          $repo:${tag}-armhf \
+          $repo:${tag}-aarch64
+        docker manifest annotate $repo:$tag $repo:${tag}-amd64 --os linux --arch amd64
+        docker manifest annotate $repo:$tag $repo:${tag}-armhf --os linux --arch arm --variant v7
+        docker manifest annotate $repo:$tag $repo:${tag}-aarch64 --os linux --arch arm64 --variant v8
         docker manifest push $repo:$tag
       }
     - |
+      for pg_ver in 16 17 18; do
+        for repo in $CI_REGISTRY_IMAGE $DOCKER_REGISTRY_DOCKERHUB_REPO quay.io/$DOCKER_REGISTRY_QUAY_REPO ghcr.io/$DOCKER_REGISTRY_GHCR_REPO; do
+          create_and_push_manifest $repo $pg_ver
+        done
+      done
+
+manifest_creation_latest:
+  <<: *manifest_definition
+  needs:
+    - manifest_creation_pg_versions
+  script:
+    - |
+      create_and_push_manifest() {
+        repo=$1
+        tag=$2
+        pg_ver=$3
+        docker manifest create $repo:$tag \
+          $repo:${pg_ver}-amd64 \
+          $repo:${pg_ver}-armhf \
+          $repo:${pg_ver}-aarch64
+        docker manifest annotate $repo:$tag $repo:${pg_ver}-amd64 --os linux --arch amd64
+        docker manifest annotate $repo:$tag $repo:${pg_ver}-armhf --os linux --arch arm --variant v7
+        docker manifest annotate $repo:$tag $repo:${pg_ver}-aarch64 --os linux --arch arm64 --variant v8
+        docker manifest push $repo:$tag
+      }
+    # Latest tag points to PostgreSQL 17 (current stable)
+    - |
       for repo in $CI_REGISTRY_IMAGE $DOCKER_REGISTRY_DOCKERHUB_REPO quay.io/$DOCKER_REGISTRY_QUAY_REPO ghcr.io/$DOCKER_REGISTRY_GHCR_REPO; do
-        create_and_push_manifest $repo latest
+        create_and_push_manifest $repo latest 17
       done
 
 manifest_creation_version:
-  image: yobasystems/alpine-docker:dind
-  stage: manifest
+  <<: *manifest_definition
   needs:
     - manifest_creation_latest
   rules:
     - if: $CI_COMMIT_TAG
   script:
-    - mkdir -p ~/.docker
-    - echo '{"experimental":"enabled"}' > ~/.docker/config.json
-    - echo "$CI_JOB_TOKEN" | docker login -u gitlab-ci-token "$CI_REGISTRY" --password-stdin
-    - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-    - echo "$QUAY_PASSWORD" | docker login -u "$QUAY_USERNAME" quay.io --password-stdin
-    - echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
     - |
       create_and_push_manifest() {
         repo=$1
         tag=$2
+        pg_ver=$3
         docker manifest create $repo:$tag --amend \
-          $repo:amd64 \
-          $repo:armhf \
-          $repo:aarch64
-        docker manifest annotate $repo:$tag $repo:amd64 --os linux --arch amd64
-        docker manifest annotate $repo:$tag $repo:armhf --os linux --arch arm --variant v7
-        docker manifest annotate $repo:$tag $repo:aarch64 --os linux --arch arm64 --variant v8
+          $repo:${pg_ver}-amd64 \
+          $repo:${pg_ver}-armhf \
+          $repo:${pg_ver}-aarch64
+        docker manifest annotate $repo:$tag $repo:${pg_ver}-amd64 --os linux --arch amd64
+        docker manifest annotate $repo:$tag $repo:${pg_ver}-armhf --os linux --arch arm --variant v7
+        docker manifest annotate $repo:$tag $repo:${pg_ver}-aarch64 --os linux --arch arm64 --variant v8
         docker manifest push $repo:$tag
       }
     - echo "Processing tag $CI_COMMIT_TAG"
@@ -235,9 +444,11 @@ manifest_creation_version:
     - MINOR=$(echo $VERSION | cut -d. -f2)
     - PATCH=$(echo $VERSION | cut -d. -f3)
     - |
-      for repo in $CI_REGISTRY_IMAGE $DOCKER_REGISTRY_DOCKERHUB_REPO quay.io/$DOCKER_REGISTRY_QUAY_REPO ghcr.io/$DOCKER_REGISTRY_GHCR_REPO; do
-        create_and_push_manifest $repo $CI_COMMIT_TAG
-        create_and_push_manifest $repo $MAJOR
-        create_and_push_manifest $repo $MAJOR.$MINOR
-        create_and_push_manifest $repo $MAJOR.$MINOR.$PATCH
+      for pg_ver in 16 17 18; do
+        for repo in $CI_REGISTRY_IMAGE $DOCKER_REGISTRY_DOCKERHUB_REPO quay.io/$DOCKER_REGISTRY_QUAY_REPO ghcr.io/$DOCKER_REGISTRY_GHCR_REPO; do
+          create_and_push_manifest $repo "${CI_COMMIT_TAG}-pg${pg_ver}" $pg_ver
+          create_and_push_manifest $repo "${MAJOR}-pg${pg_ver}" $pg_ver
+          create_and_push_manifest $repo "${MAJOR}.${MINOR}-pg${pg_ver}" $pg_ver
+          create_and_push_manifest $repo "${MAJOR}.${MINOR}.${PATCH}-pg${pg_ver}" $pg_ver
+        done
       done
