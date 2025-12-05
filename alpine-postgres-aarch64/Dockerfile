@@ -24,8 +24,11 @@ LABEL maintainer="Dominic Taylor <dominic@yoba.systems>" \
 ENV LANG en_GB.utf8
 ENV PGDATA /var/lib/postgresql/data
 
+# postgresql-url_encode versions: PG16=alpine 3.20, PG17=alpine 3.22, PG18=alpine 3.23
+ARG URL_ENCODE_REPO=https://dl-cdn.alpinelinux.org/alpine/v3.23/community
 RUN apk update && \
-    apk add su-exec tzdata libpq postgresql${POSTGRES_VERSION} postgresql-url_encode && \
+    apk add su-exec tzdata libpq postgresql${POSTGRES_VERSION} && \
+    apk add --repository=${URL_ENCODE_REPO} postgresql-url_encode && \
     mkdir /docker-entrypoint-initdb.d && \
     rm -rf /var/cache/apk/*
 

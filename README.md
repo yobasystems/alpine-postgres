@@ -11,7 +11,9 @@ This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yo
 
 ### Alpine Version 3.23.0 (Released 2025-12-03)
 
+##### Postgres Version 16.11
 ##### Postgres Version 17.7
+##### Postgres Version 18.1
 
 ---
 

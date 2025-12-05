@@ -26,9 +26,18 @@ variables:
     - echo "Building for ARCH=${ARCH}, PLATFORM=${PLATFORM}, PG_VERSION=${PG_VERSION}"
     - |
       case "${PG_VERSION}" in
-        "16") export PG_FULL_VERSION="${PG16_FULL_VERSION}" ;;
-        "17") export PG_FULL_VERSION="${PG17_FULL_VERSION}" ;;
-        "18") export PG_FULL_VERSION="${PG18_FULL_VERSION}" ;;
+        "16")
+          export PG_FULL_VERSION="${PG16_FULL_VERSION}"
+          export URL_ENCODE_REPO="https://dl-cdn.alpinelinux.org/alpine/v3.20/community"
+          ;;
+        "17")
+          export PG_FULL_VERSION="${PG17_FULL_VERSION}"
+          export URL_ENCODE_REPO="https://dl-cdn.alpinelinux.org/alpine/v3.22/community"
+          ;;
+        "18")
+          export PG_FULL_VERSION="${PG18_FULL_VERSION}"
+          export URL_ENCODE_REPO="https://dl-cdn.alpinelinux.org/alpine/v3.23/community"
+          ;;
       esac
     - apk add --update git
     - cd alpine-postgres-${ARCH}/
@@ -37,6 +46,7 @@ variables:
       --build-arg BUILD_DATE=${CI_COMMIT_TIMESTAMP}
       --build-arg POSTGRES_VERSION=${PG_VERSION}
       --build-arg POSTGRES_FULL_VERSION=${PG_FULL_VERSION}
+      --build-arg URL_ENCODE_REPO=${URL_ENCODE_REPO}
       -t ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH}
       --platform linux/${PLATFORM}
       .
