@@ -184,8 +184,15 @@ sbom_aarch64:
     - echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
     - echo "$QUAY_PASSWORD" | docker login -u "$QUAY_USERNAME" quay.io --password-stdin
     - echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$GITHUB_USERNAME" --password-stdin
+    # Get full version for this PG major version
+    - |
+      case "${PG_VERSION}" in
+        "16") export PG_FULL_VERSION="${PG16_FULL_VERSION}" ;;
+        "17") export PG_FULL_VERSION="${PG17_FULL_VERSION}" ;;
+        "18") export PG_FULL_VERSION="${PG18_FULL_VERSION}" ;;
+      esac
     - docker pull ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH}
-    # Tag with pg version prefix
+    # Tag with major version (e.g., 16-amd64)
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $CI_REGISTRY_IMAGE:${PG_VERSION}-${ARCH}
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_VERSION}-${ARCH}
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_VERSION}-${ARCH}
@@ -194,7 +201,16 @@ sbom_aarch64:
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_VERSION}-${ARCH2}
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_VERSION}-${ARCH2}
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_VERSION}-${ARCH2}
-    # Push all tags
+    # Tag with full version (e.g., 16.11-amd64) for version retention
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $CI_REGISTRY_IMAGE:${PG_FULL_VERSION}-${ARCH}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_FULL_VERSION}-${ARCH}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_FULL_VERSION}-${ARCH}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_FULL_VERSION}-${ARCH}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $CI_REGISTRY_IMAGE:${PG_FULL_VERSION}-${ARCH2}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_FULL_VERSION}-${ARCH2}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_FULL_VERSION}-${ARCH2}
+    - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_FULL_VERSION}-${ARCH2}
+    # Push major version tags
     - docker push $CI_REGISTRY_IMAGE:${PG_VERSION}-${ARCH}
     - docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_VERSION}-${ARCH}
     - docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_VERSION}-${ARCH}
@@ -203,6 +219,15 @@ sbom_aarch64:
     - docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_VERSION}-${ARCH2}
     - docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_VERSION}-${ARCH2}
     - docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_VERSION}-${ARCH2}
+    # Push full version tags
+    - docker push $CI_REGISTRY_IMAGE:${PG_FULL_VERSION}-${ARCH}
+    - docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_FULL_VERSION}-${ARCH}
+    - docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_FULL_VERSION}-${ARCH}
+    - docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_FULL_VERSION}-${ARCH}
+    - docker push $CI_REGISTRY_IMAGE:${PG_FULL_VERSION}-${ARCH2}
+    - docker push $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_FULL_VERSION}-${ARCH2}
+    - docker push quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_FULL_VERSION}-${ARCH2}
+    - docker push ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_FULL_VERSION}-${ARCH2}
     - |
       if [[ "$CI_COMMIT_TAG" ]]; then
         docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $CI_REGISTRY_IMAGE:${CI_COMMIT_TAG}-pg${PG_VERSION}-${ARCH}
@@ -400,6 +425,26 @@ manifest_creation_pg_versions:
         for repo in $CI_REGISTRY_IMAGE $DOCKER_REGISTRY_DOCKERHUB_REPO quay.io/$DOCKER_REGISTRY_QUAY_REPO ghcr.io/$DOCKER_REGISTRY_GHCR_REPO; do
           create_and_push_manifest $repo $pg_ver
         done
+      done
+    # Create full version manifests (e.g., 16.11, 17.7, 18.1) using full version arch tags
+    - |
+      create_full_version_manifest() {
+        repo=$1
+        full_ver=$2
+        docker manifest create $repo:$full_ver \
+          $repo:${full_ver}-amd64 \
+          $repo:${full_ver}-armhf \
+          $repo:${full_ver}-aarch64
+        docker manifest annotate $repo:$full_ver $repo:${full_ver}-amd64 --os linux --arch amd64
+        docker manifest annotate $repo:$full_ver $repo:${full_ver}-armhf --os linux --arch arm --variant v7
+        docker manifest annotate $repo:$full_ver $repo:${full_ver}-aarch64 --os linux --arch arm64 --variant v8
+        docker manifest push $repo:$full_ver
+      }
+    - |
+      for repo in $CI_REGISTRY_IMAGE $DOCKER_REGISTRY_DOCKERHUB_REPO quay.io/$DOCKER_REGISTRY_QUAY_REPO ghcr.io/$DOCKER_REGISTRY_GHCR_REPO; do
+        create_full_version_manifest $repo ${PG16_FULL_VERSION}
+        create_full_version_manifest $repo ${PG17_FULL_VERSION}
+        create_full_version_manifest $repo ${PG18_FULL_VERSION}
       done
 
 manifest_creation_latest:
