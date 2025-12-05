@@ -21,17 +21,17 @@ LABEL maintainer="Dominic Taylor <dominic@yoba.systems>" \
     org.opencontainers.image.revision=$VCS_REF \
     org.opencontainers.image.created=$BUILD_DATE
 
-ENV LANG en_GB.utf8
-ENV PGDATA /var/lib/postgresql/data
+ENV LANG=en_GB.utf8
+ENV PGDATA=/var/lib/postgresql/data
 
 # postgresql-url_encode versions: PG16=alpine 3.20, PG17=alpine 3.22, PG18=alpine 3.23
 ARG URL_ENCODE_REPO=https://dl-cdn.alpinelinux.org/alpine/v3.23/community
 RUN apk update && \
     apk add su-exec tzdata libpq postgresql${POSTGRES_VERSION} && \
-    apk add --repository=${URL_ENCODE_REPO} postgresql-url_encode && \
+    echo "@urlencode ${URL_ENCODE_REPO}" >> /etc/apk/repositories && \
+    apk add postgresql-url_encode@urlencode && \
     mkdir /docker-entrypoint-initdb.d && \
     rm -rf /var/cache/apk/*
-
 
 VOLUME /var/lib/postgresql/data
 
