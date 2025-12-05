@@ -1,3 +1,13 @@
+workflow:
+  rules:
+    - changes:
+        - 'alpine-*/**'
+        - 'Dockerfile'
+        - 'LICENSE'
+        - '.gitlab-ci.yml'
+      when: always
+    - when: never
+
 stages:
   - build
   - test
@@ -15,9 +25,6 @@ variables:
   PG17_FULL_VERSION: "17.7"
   PG18_FULL_VERSION: "18.1"
 
-# =============================================================================
-# BUILD STAGE
-# =============================================================================
 .build_template: &build_definition
   image: yobasystems/alpine-docker:dind
   stage: build
@@ -137,9 +144,6 @@ arm64v8_pg18_build:
     PLATFORM: arm64/v8
     PG_VERSION: "18"
 
-# =============================================================================
-# TEST STAGE - Container Scanning
-# =============================================================================
 container_scanning_amd64:
   tags:
     - amd64
@@ -170,9 +174,6 @@ sbom_aarch64:
   tags:
     - aarch64
 
-# =============================================================================
-# DEPLOY STAGE
-# =============================================================================
 .deploy_template: &deploy_definition
   image: yobasystems/alpine-docker:dind
   stage: deploy
@@ -192,7 +193,7 @@ sbom_aarch64:
         "18") export PG_FULL_VERSION="${PG18_FULL_VERSION}" ;;
       esac
     - docker pull ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH}
-    # Tag with major version (e.g., 16-amd64)
+    # Tag with major version (e.g., 18-amd64)
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $CI_REGISTRY_IMAGE:${PG_VERSION}-${ARCH}
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_VERSION}-${ARCH}
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_VERSION}-${ARCH}
@@ -201,7 +202,7 @@ sbom_aarch64:
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_VERSION}-${ARCH2}
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_VERSION}-${ARCH2}
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} ghcr.io/$DOCKER_REGISTRY_GHCR_REPO:${PG_VERSION}-${ARCH2}
-    # Tag with full version (e.g., 16.11-amd64) for version retention
+    # Tag with full version (e.g., 18.1-amd64) for version retention
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $CI_REGISTRY_IMAGE:${PG_FULL_VERSION}-${ARCH}
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} $DOCKER_REGISTRY_DOCKERHUB_REPO:${PG_FULL_VERSION}-${ARCH}
     - docker tag ${CI_REGISTRY_IMAGE}/${CI_COMMIT_SHORT_SHA}:pg${PG_VERSION}-${ARCH} quay.io/$DOCKER_REGISTRY_QUAY_REPO:${PG_FULL_VERSION}-${ARCH}
@@ -377,9 +378,6 @@ arm64v8_pg18_deploy:
     - container_scanning_aarch64
     - sbom_aarch64
 
-# =============================================================================
-# MANIFEST STAGE
-# =============================================================================
 .manifest_template: &manifest_definition
   image: yobasystems/alpine-docker:dind
   stage: manifest

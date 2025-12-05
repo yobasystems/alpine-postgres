@@ -11,9 +11,11 @@ This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yo
 
 ### Alpine Version 3.23.0 (Released 2025-12-03)
 
-##### Postgres Version 16.11
-##### Postgres Version 17.7 
 ##### Postgres Version 18.1 (Latest)
+
+##### Postgres Version 17.7
+
+##### Postgres Version 16.11
 
 ---
 
@@ -42,15 +44,13 @@ PostgreSQL, often simply "Postgres", is an object-relational database management
 ## ✨ Features
 
 - Minimal size only, minimal layers
-- Memory usage is minimal on a simple install.
+- Memory usage is minimal on a simple install
 
 ## 🏗️ Architectures
 
 - `:amd64`, `:x86_64` - 64 bit Intel/AMD (x86_64/amd64)
 - `:arm64v8`, `:aarch64` - 64 bit ARM (ARMv8/aarch64)
 - `:arm32v7`, `:armhf` - 32 bit ARM (ARMv7/armhf)
-
-#### 📝 PLEASE CHECK TAGS BELOW FOR SUPPORTED ARCHITECTURES, THE ABOVE IS A LIST OF EXPLANATION
 
 ## 🏷️ Tags
 
@@ -108,9 +108,9 @@ It will create a new db called "postgres", with user "postgres" and set root pas
 
 ####(Please pass your own credentials, don't use these ones for production!!)
 
-```yalm
+```yaml
 postgres:
-  image: yobasystems/alpine-postgres:17.7
+  image: yobasystems/alpine-postgres:18.1
   environment:
     POSTGRES_DB: salesdb
     POSTGRES_USER: johnsmith
