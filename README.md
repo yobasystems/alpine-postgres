@@ -31,7 +31,6 @@ This container image [(yobasystems/alpine-postgres)](https://hub.docker.com/r/yo
 - [Source Repositories](#source-repositories)
 - [Container Registries](#container-registries)
 - [Links](#links)
-- [Donation](#donation)
 
 ## 🏔️ What is Alpine Linux?
 
